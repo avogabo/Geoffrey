@@ -31,3 +31,9 @@
   2) borrar imagen local vieja/huérfana,
   3) recrear con la nueva `ghcr.io/avogabo/edrmount:latest`.
 - No tocar volúmenes persistentes (`/config`, `/cache`, `/backups`, `/host`) para conservar estado.
+- Este flujo es crítico y no debe perderse en compactaciones/resets.
+
+## LocalSoundiiz (inicio)
+- Mantener continuidad del arranque local y estado del proyecto.
+- Ruta de trabajo: `/home/pulgarcito/.openclaw/workspace/soundiiz-local`.
+- Si se reinicia contexto, recuperar primero README + estado Docker antes de tocar despliegues.
