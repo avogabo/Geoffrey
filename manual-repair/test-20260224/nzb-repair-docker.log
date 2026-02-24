@@ -1,0 +1,44 @@
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+go: downloading github.com/spf13/cobra v1.9.1
+go: downloading github.com/javi11/nntppool v0.2.1
+go: downloading golang.org/x/sync v0.13.0
+go: downloading gopkg.in/yaml.v3 v3.0.1
+go: downloading github.com/avast/retry-go v3.0.0+incompatible
+go: downloading github.com/hashicorp/go-multierror v1.1.1
+go: downloading github.com/jackc/puddle/v2 v2.2.2
+go: downloading github.com/javi11/nntpcli v0.5.0
+go: downloading go.uber.org/mock v0.5.0
+go: downloading golang.org/x/text v0.24.0
+go: downloading github.com/mattn/go-sqlite3 v1.14.27
+go: downloading github.com/Tensai75/nzbparser v0.1.0
+go: downloading github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213
+go: downloading github.com/mnightingale/rapidyenc v0.0.0-20240809192858-2494683cdd67
+go: downloading github.com/schollz/progressbar/v3 v3.18.0
+go: downloading github.com/sourcegraph/conc v0.3.0
+go: downloading github.com/opencontainers/selinux v1.12.0
+go: downloading github.com/spf13/pflag v1.0.6
+go: downloading github.com/hashicorp/errwrap v1.0.0
+go: downloading github.com/Tensai75/subjectparser v0.1.0
+go: downloading golang.org/x/net v0.39.0
+go: downloading github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db
+go: downloading github.com/rivo/uniseg v0.4.7
+go: downloading golang.org/x/term v0.31.0
+go: downloading golang.org/x/sys v0.32.0
+time=2026-02-24T08:09:44.841Z level=INFO msg="verifying providers..."
+time=2026-02-24T08:09:47.490Z level=ERROR msg="failed to verify providers: 1 error occurred:\n\t* failed to verify download provider reader2.newsxs.nl: error authenticating to reader2.newsxs.nl/gimenez849@newsxs.nl: 482 Welcome by NewsXS - gimenez849, -5613253416 bytes remaining, posting allowed\n\n"
+time=2026-02-24T08:09:47.491Z level=INFO msg="providers verified"
+time=2026-02-24T08:09:47.491Z level=INFO msg="verifying providers..."
+time=2026-02-24T08:09:48.119Z level=INFO msg="capabilities for provider news.newshosting.com: [VERSION 1 MODE-READER READER PIPELINING LIST COUNTS OVERVIEW.FMT ACTIVE ACTIVE.TIMES NEWSGROUPS XHDR XOVER XZVER XZHDR XFEATURE-COMPRESS GZIP TERMINATOR]"
+time=2026-02-24T08:09:48.119Z level=INFO msg="providers verified"
+time=2026-02-24T08:09:48.119Z level=INFO msg="Starting repair" input=/work/bienvenido.combined.corrupt.nzb output=/work/bienvenido.combined.corrupt.nzb temp=/tmp
+time=2026-02-24T08:09:48.322Z level=INFO msg="No par2 files found in NZB, stopping repair."
+time=2026-02-24T08:09:48.322Z level=INFO msg="Repair successful" input=/work/bienvenido.combined.corrupt.nzb output=/work/bienvenido.combined.corrupt.nzb
+EXIT:0 ELAPSED:1:14.90
