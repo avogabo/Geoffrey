@@ -32,9 +32,17 @@ def main():
 
     collector = None
     if cfg.market_data.asset_ids:
-        collector = PolymarketMarketWSCollector(cfg.market_data.ws_url, cfg.market_data.asset_ids)
+        pairs = [
+            {
+                "name": p.name,
+                "yes_asset_id": p.yes_asset_id,
+                "no_asset_id": p.no_asset_id,
+            }
+            for p in cfg.market_data.market_pairs
+        ]
+        collector = PolymarketMarketWSCollector(cfg.market_data.ws_url, cfg.market_data.asset_ids, pairs)
         collector.start()
-        print(f"[green]WS collector activo[/green] assets={len(cfg.market_data.asset_ids)}")
+        print(f"[green]WS collector activo[/green] assets={len(cfg.market_data.asset_ids)} pairs={len(pairs)}")
 
     notifier = TelegramNotifier(
         enabled=cfg.alerts.telegram_enabled,

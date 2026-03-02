@@ -14,9 +14,10 @@ class AssetState:
 
 
 class PolymarketMarketWSCollector:
-    def __init__(self, ws_url: str, asset_ids: list[str]):
+    def __init__(self, ws_url: str, asset_ids: list[str], market_pairs: list[dict] | None = None):
         self.ws_url = ws_url
         self.asset_ids = asset_ids
+        self.market_pairs = market_pairs or []
         self.state: dict[str, AssetState] = {a: AssetState() for a in asset_ids}
         self._thread = None
         self._ws = None
@@ -66,10 +67,31 @@ class PolymarketMarketWSCollector:
 
     def snapshots(self) -> list[dict]:
         out = []
+        if self.market_pairs:
+            for p in self.market_pairs:
+                yes = self.state.get(p["yes_asset_id"], AssetState())
+                no = self.state.get(p["no_asset_id"], AssetState())
+                out.append(
+                    {
+                        "market": p.get("name", "unknown"),
+                        "yes_asset_id": p["yes_asset_id"],
+                        "no_asset_id": p["no_asset_id"],
+                        "yes_best_bid": yes.best_bid,
+                        "yes_best_ask": yes.best_ask,
+                        "no_best_bid": no.best_bid,
+                        "no_best_ask": no.best_ask,
+                        "ask_sum": yes.best_ask + no.best_ask,
+                        "bid_sum": yes.best_bid + no.best_bid,
+                        "liquidity_usd": 1000,
+                        "notional_usd": 10,
+                    }
+                )
+            return out
+
+        # Fallback when no pairs are configured
         for aid, s in self.state.items():
-            # Simple synthetic net edge estimate from spread compression proxy.
             spread = max(0.0, s.best_ask - s.best_bid)
-            est_net_edge_bps = max(0.0, (0.02 - spread) * 10000)  # heuristic placeholder
+            est_net_edge_bps = max(0.0, (0.02 - spread) * 10000)
             out.append(
                 {
                     "market": aid,

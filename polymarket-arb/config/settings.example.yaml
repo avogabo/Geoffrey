@@ -6,6 +6,7 @@ strategy:
   min_edge_bps: 40          # 0.40%
   min_liquidity_usd: 200
   max_slippage_bps: 20
+  fee_bps_per_leg: 15
 
 risk:
   max_notional_per_trade_usd: 20
@@ -24,6 +25,8 @@ market_data:
   ws_url: "wss://ws-subscriptions-clob.polymarket.com/ws/market"
   # Rellena con token IDs reales (asset IDs YES/NO)
   asset_ids: []
+  # Pares YES/NO del mismo mercado para arbitraje de paridad
+  market_pairs: []
 
 # Placeholder para credenciales (no subir secrets)
 alerts:

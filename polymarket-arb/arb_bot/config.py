@@ -12,6 +12,7 @@ class StrategyCfg(BaseModel):
     min_edge_bps: float = 40
     min_liquidity_usd: float = 200
     max_slippage_bps: float = 20
+    fee_bps_per_leg: float = 15
 
 
 class RiskCfg(BaseModel):
@@ -42,9 +43,16 @@ class AlertsCfg(BaseModel):
     min_seconds_between_alerts: int = 60
 
 
+class MarketPairCfg(BaseModel):
+    name: str
+    yes_asset_id: str
+    no_asset_id: str
+
+
 class MarketDataCfg(BaseModel):
     ws_url: str = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
     asset_ids: list[str] = []
+    market_pairs: list[MarketPairCfg] = []
 
 
 class Settings(BaseModel):
