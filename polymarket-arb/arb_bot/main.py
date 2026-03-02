@@ -7,6 +7,7 @@ from .engine import ArbEngine
 from .risk import RiskManager
 from .executor import PaperExecutor, LiveExecutor
 from .collector import PolymarketMarketWSCollector
+from .notifier import TelegramNotifier
 
 
 def fake_market_feed() -> list[dict]:
@@ -35,6 +36,13 @@ def main():
         collector.start()
         print(f"[green]WS collector activo[/green] assets={len(cfg.market_data.asset_ids)}")
 
+    notifier = TelegramNotifier(
+        enabled=cfg.alerts.telegram_enabled,
+        bot_token=cfg.alerts.telegram_bot_token,
+        chat_id=cfg.alerts.telegram_chat_id,
+        min_interval_sec=cfg.alerts.min_seconds_between_alerts,
+    )
+
     print(f"[cyan]Bot iniciado[/cyan] mode={mode} poll={cfg.runtime.poll_interval_seconds}s")
 
     while True:
@@ -50,8 +58,10 @@ def main():
             if cfg.execution.dry_run and mode == "live":
                 print(f"[yellow]DRY-RUN LIVE[/yellow] {opp}")
             else:
-                executor.execute(opp)
+                result = executor.execute(opp)
                 risk.on_fill(opp.notional_usd)
+                if result and isinstance(result, dict):
+                    notifier.send(f"[BOT] {result.get('message','Operación ejecutada')}")
 
         time.sleep(cfg.runtime.poll_interval_seconds)
 

@@ -35,6 +35,13 @@ class SecretsCfg(BaseModel):
     polymarket_api_key: str = ""
 
 
+class AlertsCfg(BaseModel):
+    telegram_enabled: bool = False
+    telegram_bot_token: str = ""
+    telegram_chat_id: str = ""
+    min_seconds_between_alerts: int = 60
+
+
 class MarketDataCfg(BaseModel):
     ws_url: str = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
     asset_ids: list[str] = []
@@ -47,6 +54,7 @@ class Settings(BaseModel):
     paper: PaperCfg = PaperCfg()
     execution: ExecutionCfg = ExecutionCfg()
     market_data: MarketDataCfg = MarketDataCfg()
+    alerts: AlertsCfg = AlertsCfg()
     secrets: SecretsCfg = SecretsCfg()
 
 

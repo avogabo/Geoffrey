@@ -26,6 +26,12 @@ market_data:
   asset_ids: []
 
 # Placeholder para credenciales (no subir secrets)
+alerts:
+  telegram_enabled: false
+  telegram_bot_token: ""
+  telegram_chat_id: ""
+  min_seconds_between_alerts: 60
+
 secrets:
   polymarket_private_key: ""
   polymarket_api_key: ""
