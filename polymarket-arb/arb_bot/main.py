@@ -52,12 +52,19 @@ def main():
     )
 
     print(f"[cyan]Bot iniciado[/cyan] mode={mode} poll={cfg.runtime.poll_interval_seconds}s")
+    last_signal_at: dict[str, float] = {}
 
     while True:
         snapshots = collector.snapshots() if collector else fake_market_feed()
         opportunities = engine.detect(snapshots)
 
         for opp in opportunities:
+            signal_key = f"{opp.market}:{opp.action}"
+            now = time.time()
+            last = last_signal_at.get(signal_key, 0)
+            if now - last < cfg.strategy.signal_cooldown_sec:
+                continue
+
             ok, reason = risk.allow_trade(opp.notional_usd)
             if not ok:
                 print(f"[yellow]SKIP[/yellow] {opp.market} -> {reason}")
@@ -65,9 +72,11 @@ def main():
 
             if cfg.execution.dry_run and mode == "live":
                 print(f"[yellow]DRY-RUN LIVE[/yellow] {opp}")
+                last_signal_at[signal_key] = now
             else:
                 result = executor.execute(opp)
                 risk.on_fill(opp.notional_usd)
+                last_signal_at[signal_key] = now
                 if result and isinstance(result, dict):
                     notifier.send(f"[BOT] {result.get('message','Operación ejecutada')}")
 

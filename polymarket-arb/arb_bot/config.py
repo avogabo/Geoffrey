@@ -13,6 +13,7 @@ class StrategyCfg(BaseModel):
     min_liquidity_usd: float = 200
     max_slippage_bps: float = 20
     fee_bps_per_leg: float = 15
+    signal_cooldown_sec: int = 30
 
 
 class RiskCfg(BaseModel):
