@@ -6,10 +6,10 @@ from .config import load_settings
 from .engine import ArbEngine
 from .risk import RiskManager
 from .executor import PaperExecutor, LiveExecutor
+from .collector import PolymarketMarketWSCollector
 
 
 def fake_market_feed() -> list[dict]:
-    # Mock para validar pipeline end-to-end sin exchange real.
     return [
         {"market": "example-election", "est_net_edge_bps": 55, "liquidity_usd": 500, "notional_usd": 10},
         {"market": "example-macro", "est_net_edge_bps": 12, "liquidity_usd": 1500, "notional_usd": 10},
@@ -29,10 +29,16 @@ def main():
     risk = RiskManager(cfg.risk)
     executor = PaperExecutor() if mode == "paper" else LiveExecutor()
 
+    collector = None
+    if cfg.market_data.asset_ids:
+        collector = PolymarketMarketWSCollector(cfg.market_data.ws_url, cfg.market_data.asset_ids)
+        collector.start()
+        print(f"[green]WS collector activo[/green] assets={len(cfg.market_data.asset_ids)}")
+
     print(f"[cyan]Bot iniciado[/cyan] mode={mode} poll={cfg.runtime.poll_interval_seconds}s")
 
     while True:
-        snapshots = fake_market_feed()  # TODO: reemplazar por collector real
+        snapshots = collector.snapshots() if collector else fake_market_feed()
         opportunities = engine.detect(snapshots)
 
         for opp in opportunities:

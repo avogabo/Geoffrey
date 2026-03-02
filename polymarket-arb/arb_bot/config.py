@@ -35,12 +35,18 @@ class SecretsCfg(BaseModel):
     polymarket_api_key: str = ""
 
 
+class MarketDataCfg(BaseModel):
+    ws_url: str = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
+    asset_ids: list[str] = []
+
+
 class Settings(BaseModel):
     runtime: RuntimeCfg = RuntimeCfg()
     strategy: StrategyCfg = StrategyCfg()
     risk: RiskCfg = RiskCfg()
     paper: PaperCfg = PaperCfg()
     execution: ExecutionCfg = ExecutionCfg()
+    market_data: MarketDataCfg = MarketDataCfg()
     secrets: SecretsCfg = SecretsCfg()
 
 

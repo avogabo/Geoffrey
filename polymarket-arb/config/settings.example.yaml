@@ -20,6 +20,11 @@ execution:
   mode: paper               # paper | live
   dry_run: true
 
+market_data:
+  ws_url: "wss://ws-subscriptions-clob.polymarket.com/ws/market"
+  # Rellena con token IDs reales (asset IDs YES/NO)
+  asset_ids: []
+
 # Placeholder para credenciales (no subir secrets)
 secrets:
   polymarket_private_key: ""
