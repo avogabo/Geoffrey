@@ -11,3 +11,4 @@ class Opportunity:
     notional_usd: float
     action: str = "long_bundle"
     strategy_name: str = "yes_no_parity_arb"
+    total_cost_bps: float = 0.0

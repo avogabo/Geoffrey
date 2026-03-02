@@ -7,6 +7,7 @@ strategy:
   min_liquidity_usd: 200
   max_slippage_bps: 20
   fee_bps_per_leg: 15
+  gas_bps_roundtrip: 5
   signal_cooldown_sec: 30   # evita señales repetidas por mercado/acción
 
 risk:

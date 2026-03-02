@@ -8,8 +8,8 @@ class ArbEngine:
 
     def detect(self, market_snapshots: list[dict]) -> list[Opportunity]:
         out: list[Opportunity] = []
-        # Round-trip cost approximation: 2 legs + slippage buffer.
-        total_cost_bps = (2 * self.cfg.fee_bps_per_leg) + self.cfg.max_slippage_bps
+        # Round-trip cost approximation: 2 legs fees + slippage buffer + gas.
+        total_cost_bps = (2 * self.cfg.fee_bps_per_leg) + self.cfg.max_slippage_bps + self.cfg.gas_bps_roundtrip
 
         for snap in market_snapshots:
             liq = float(snap.get("liquidity_usd", 0))
@@ -33,6 +33,7 @@ class ArbEngine:
                             est_net_edge_bps=net_long_bps,
                             notional_usd=float(snap.get("notional_usd", 10)),
                             action="long_bundle",
+                            total_cost_bps=total_cost_bps,
                         )
                     )
 
@@ -49,6 +50,7 @@ class ArbEngine:
                             est_net_edge_bps=net_short_bps,
                             notional_usd=float(snap.get("notional_usd", 10)),
                             action="short_bundle",
+                            total_cost_bps=total_cost_bps,
                         )
                     )
                 continue
