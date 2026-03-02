@@ -42,8 +42,8 @@ class AlertsCfg(BaseModel):
     telegram_bot_token: str = ""
     telegram_chat_id: str = ""
     min_seconds_between_alerts: int = 60
-    notify_skips: bool = True
-    heartbeat_seconds: int = 300
+    notify_skips: bool = False
+    heartbeat_seconds: int = 0
 
 
 class MarketPairCfg(BaseModel):
@@ -57,7 +57,8 @@ class MarketDataCfg(BaseModel):
     asset_ids: list[str] = []
     market_pairs: list[MarketPairCfg] = []
     auto_discover_enabled: bool = True
-    auto_discover_limit: int = 30
+    auto_discover_limit: int = 500
+    auto_discover_refresh_sec: int = 120
 
 
 class Settings(BaseModel):

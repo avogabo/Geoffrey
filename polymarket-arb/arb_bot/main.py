@@ -97,12 +97,19 @@ def main():
     print(f"[cyan]Bot iniciado[/cyan] mode={mode} poll={cfg.runtime.poll_interval_seconds}s")
     last_signal_at: dict[str, float] = {}
     last_heartbeat = 0.0
+    last_discovery = time.time()
 
     while True:
         now_loop = time.time()
         if cfg.alerts.telegram_enabled and cfg.alerts.heartbeat_seconds > 0 and (now_loop - last_heartbeat) >= cfg.alerts.heartbeat_seconds:
             notifier.send(f"💓 polymarket-arb vivo | mode={mode} | pairs={len(pairs)}")
             last_heartbeat = now_loop
+        if cfg.market_data.auto_discover_enabled and collector and cfg.market_data.auto_discover_refresh_sec > 0 and (now_loop - last_discovery) >= cfg.market_data.auto_discover_refresh_sec:
+            newly = discover_market_pairs(cfg.market_data.auto_discover_limit)
+            collector.add_pairs(newly)
+            pairs = collector.market_pairs
+            last_discovery = now_loop
+
         snapshots = collector.snapshots() if collector else fake_market_feed()
         opportunities = engine.detect(snapshots)
 

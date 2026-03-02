@@ -27,7 +27,8 @@ market_data:
   # Rellena con token IDs reales (asset IDs YES/NO)
   asset_ids: []
   auto_discover_enabled: true
-  auto_discover_limit: 30
+  auto_discover_limit: 500
+  auto_discover_refresh_sec: 120
   # Pares YES/NO del mismo mercado para arbitraje de paridad
   market_pairs: []
 
@@ -37,8 +38,8 @@ alerts:
   telegram_bot_token: ""
   telegram_chat_id: ""
   min_seconds_between_alerts: 60
-  notify_skips: true
-  heartbeat_seconds: 300
+  notify_skips: false
+  heartbeat_seconds: 0
 
 secrets:
   polymarket_private_key: ""

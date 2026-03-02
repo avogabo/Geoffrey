@@ -16,11 +16,36 @@ class AssetState:
 class PolymarketMarketWSCollector:
     def __init__(self, ws_url: str, asset_ids: list[str], market_pairs: list[dict] | None = None):
         self.ws_url = ws_url
-        self.asset_ids = asset_ids
+        self.asset_ids = list(dict.fromkeys(asset_ids))
         self.market_pairs = market_pairs or []
-        self.state: dict[str, AssetState] = {a: AssetState() for a in asset_ids}
+        self.state: dict[str, AssetState] = {a: AssetState() for a in self.asset_ids}
         self._thread = None
         self._ws = None
+
+    def add_pairs(self, new_pairs: list[dict]):
+        if not new_pairs:
+            return
+        known = {p.get("name") for p in self.market_pairs}
+        added_assets = []
+        for p in new_pairs:
+            if p.get("name") in known:
+                continue
+            self.market_pairs.append(p)
+            known.add(p.get("name"))
+            for aid in (p.get("yes_asset_id"), p.get("no_asset_id")):
+                if aid and aid not in self.state:
+                    self.state[aid] = AssetState()
+                    self.asset_ids.append(aid)
+                    added_assets.append(aid)
+        if added_assets and self._ws:
+            try:
+                self._ws.send(json.dumps({
+                    "assets_ids": added_assets,
+                    "type": "market",
+                    "custom_feature_enabled": True,
+                }))
+            except Exception:
+                pass
 
     def start(self):
         if self._thread and self._thread.is_alive():
