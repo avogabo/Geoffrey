@@ -26,6 +26,8 @@ market_data:
   ws_url: "wss://ws-subscriptions-clob.polymarket.com/ws/market"
   # Rellena con token IDs reales (asset IDs YES/NO)
   asset_ids: []
+  auto_discover_enabled: true
+  auto_discover_limit: 30
   # Pares YES/NO del mismo mercado para arbitraje de paridad
   market_pairs: []
 
@@ -35,6 +37,8 @@ alerts:
   telegram_bot_token: ""
   telegram_chat_id: ""
   min_seconds_between_alerts: 60
+  notify_skips: true
+  heartbeat_seconds: 300
 
 secrets:
   polymarket_private_key: ""
