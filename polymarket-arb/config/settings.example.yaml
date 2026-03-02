@@ -1,0 +1,26 @@
+runtime:
+  poll_interval_seconds: 2
+  log_level: INFO
+
+strategy:
+  min_edge_bps: 40          # 0.40%
+  min_liquidity_usd: 200
+  max_slippage_bps: 20
+
+risk:
+  max_notional_per_trade_usd: 20
+  max_total_exposure_usd: 200
+  max_daily_loss_usd: 30
+  kill_switch: false
+
+paper:
+  starting_balance_usd: 1000
+
+execution:
+  mode: paper               # paper | live
+  dry_run: true
+
+# Placeholder para credenciales (no subir secrets)
+secrets:
+  polymarket_private_key: ""
+  polymarket_api_key: ""
