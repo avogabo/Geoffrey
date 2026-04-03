@@ -185,3 +185,123 @@ body { margin: 0; background: radial-gradient(circle at top, #13233f 0%, #08111f
   font-size: 0.85rem;
   word-break: break-word;
 }
+
+.media-card {
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+
+.detail-shell {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #15294a 0%, #08111f 45%, #050914 100%);
+}
+
+.detail-hero {
+  position: relative;
+  min-height: 54vh;
+  display: flex;
+  align-items: end;
+  background: linear-gradient(135deg, #11203a, #1c345a 55%, #08111f);
+}
+
+.detail-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8,17,31,0.2) 0%, rgba(8,17,31,0.55) 60%, #08111f 100%);
+}
+
+.detail-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 32px;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  border: 0;
+  color: white;
+  background: rgba(255,255,255,0.1);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 28px;
+  align-items: end;
+}
+
+.detail-poster {
+  min-height: 420px;
+  border-radius: 24px;
+}
+
+.detail-copy h1 {
+  margin: 16px 0 10px;
+  font-size: clamp(2rem, 4vw, 4rem);
+}
+
+.detail-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  color: #d3dcef;
+}
+
+.detail-meta-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-synopsis {
+  margin-top: 18px;
+  color: #d7dfef;
+  line-height: 1.7;
+  max-width: 860px;
+}
+
+.detail-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.path-chip {
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  color: #d9e3f6;
+  font-size: 0.85rem;
+}
+
+.detail-content {
+  padding: 24px 32px 48px;
+}
+
+.season-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.season-card {
+  border-radius: 22px;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.season-card ul {
+  padding-left: 18px;
+  color: #cad4e6;
+  line-height: 1.5;
+}
