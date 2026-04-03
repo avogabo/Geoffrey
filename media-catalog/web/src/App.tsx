@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, Tv, Film, Sparkles, FolderTree, ArrowLeft, CalendarDays, Clapperboard } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Tv, Film, Sparkles, FolderTree, ArrowLeft, CalendarDays, Clapperboard, Layers3, Star } from 'lucide-react';
 import './App.css';
 import type { CatalogData, MediaItem } from './types';
 
@@ -28,47 +28,60 @@ function App() {
     );
   }, [items, query]);
 
-  const selected = useMemo(
-    () => items.find((item) => item.id === selectedId) ?? null,
-    [items, selectedId],
-  );
-
-  if (selected) {
-    return <DetailView item={selected} onBack={() => setSelectedId(null)} />;
-  }
+  const selected = useMemo(() => items.find((item) => item.id === selectedId) ?? null, [items, selectedId]);
+  const featured = filtered.slice(0, 18);
 
   return (
-    <div className="app-shell">
-      <section className="hero">
-        <div className="hero-overlay" />
-        <div className="hero-content">
-          <span className="badge"><Sparkles size={14} /> Media Catalog MVP</span>
-          <h1>Tu colección, pero bonita.</h1>
-          <p>
-            Catálogo visual moderno alimentado por tu árbol de media, pensado para web + búsqueda desde Telegram.
-          </p>
-          <div className="stats-row">
-            <div className="stat"><strong>{catalog?.count ?? 0}</strong><span>títulos indexados</span></div>
-            <div className="stat"><strong>{items.filter((x) => x.type === 'series').length}</strong><span>series</span></div>
-            <div className="stat"><strong>{items.filter((x) => x.type === 'movie').length}</strong><span>películas</span></div>
-          </div>
-          <div className="search-box">
-            <Search size={18} />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar Bosch, Fallout, 4K, 2024..." />
-          </div>
-        </div>
-      </section>
+    <div className="app-shell premium-shell">
+      <AnimatePresence mode="wait">
+        {selected ? (
+          <DetailView key={selected.id} item={selected} onBack={() => setSelectedId(null)} />
+        ) : (
+          <motion.div key="catalog" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <section className="hero premium-hero">
+              <div className="hero-overlay premium-overlay" />
+              <div className="hero-content premium-content">
+                <span className="badge hero-badge"><Sparkles size={14} /> Toodles Media Catalog</span>
+                <h1>Tu colección con pinta de plataforma seria.</h1>
+                <p>
+                  Catálogo visual conectado a tu colección real, con navegación bonita, detalle por título y pensado para futura búsqueda desde Telegram.
+                </p>
+                <div className="stats-row premium-stats">
+                  <StatCard value={catalog?.count ?? 0} label="títulos" />
+                  <StatCard value={items.filter((x) => x.type === 'series').length} label="series" />
+                  <StatCard value={items.filter((x) => x.type === 'movie').length} label="películas" />
+                </div>
+                <div className="search-box premium-search">
+                  <Search size={18} />
+                  <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar Bosch, Fallout, 4K, 2024..." />
+                </div>
+              </div>
+            </section>
 
-      <section className="section-header">
-        <h2>Catálogo</h2>
-        <p>{filtered.length} resultados · fuente: {catalog?.generatedFrom ?? 'cargando...'}</p>
-      </section>
+            <section className="section-header premium-header">
+              <div>
+                <h2>Catálogo</h2>
+                <p>{filtered.length} resultados · fuente: {catalog?.generatedFrom ?? 'cargando...'}</p>
+              </div>
+            </section>
 
-      <section className="card-grid">
-        {filtered.slice(0, 24).map((item, index) => (
-          <MediaCard key={item.id} item={item} index={index} onOpen={() => setSelectedId(item.id)} />
-        ))}
-      </section>
+            <section className="card-grid premium-grid">
+              {featured.map((item, index) => (
+                <MediaCard key={item.id} item={item} index={index} onOpen={() => setSelectedId(item.id)} />
+              ))}
+            </section>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function StatCard({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="stat premium-stat">
+      <strong>{value}</strong>
+      <span>{label}</span>
     </div>
   );
 }
@@ -77,19 +90,19 @@ function MediaCard({ item, index, onOpen }: { item: MediaItem; index: number; on
   return (
     <motion.button
       type="button"
-      className="media-card"
-      initial={{ opacity: 0, y: 24 }}
+      className="media-card premium-card"
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.03 }}
+      transition={{ delay: index * 0.025 }}
       onClick={onOpen}
     >
-      <div className="poster poster-fallback">
+      <div className="poster poster-fallback premium-poster">
         <div>
           {item.type === 'series' ? <Tv size={28} /> : <Film size={28} />}
           <span>{item.title}</span>
         </div>
       </div>
-      <div className="card-body">
+      <div className="card-body premium-card-body">
         <div className="card-topline">
           <span className="type-pill">{item.type === 'series' ? <Tv size={14} /> : <Film size={14} />}{item.type}</span>
           <span className="quality">{item.quality}</span>
@@ -108,29 +121,32 @@ function MediaCard({ item, index, onOpen }: { item: MediaItem; index: number; on
 
 function DetailView({ item, onBack }: { item: MediaItem; onBack: () => void }) {
   return (
-    <div className="detail-shell">
-      <section className="detail-hero">
-        <div className="detail-overlay" />
+    <motion.div className="detail-shell premium-detail-shell" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <section className="detail-hero premium-detail-hero">
+        <div className="detail-overlay premium-detail-overlay" />
         <div className="detail-inner">
-          <button className="back-button" onClick={onBack}><ArrowLeft size={16} /> Volver</button>
-          <div className="detail-layout">
-            <div className="detail-poster poster-fallback">
+          <button className="back-button premium-back" onClick={onBack}><ArrowLeft size={16} /> Volver al catálogo</button>
+          <div className="detail-layout premium-detail-layout">
+            <div className="detail-poster poster-fallback premium-detail-poster">
               <div>
-                {item.type === 'series' ? <Tv size={36} /> : <Film size={36} />}
+                {item.type === 'series' ? <Tv size={40} /> : <Film size={40} />}
                 <span>{item.title}</span>
               </div>
             </div>
-            <div className="detail-copy">
-              <span className="badge">{item.type === 'series' ? 'Serie' : 'Película'}</span>
+            <div className="detail-copy premium-detail-copy">
+              <div className="detail-kicker-row">
+                <span className="badge">{item.type === 'series' ? 'Serie' : 'Película'}</span>
+                <span className="rating-pill"><Star size={14} /> colección</span>
+              </div>
               <h1>{item.title}</h1>
-              <div className="detail-meta-row">
+              <div className="detail-meta-row premium-detail-meta">
                 <span><CalendarDays size={16} /> {item.year ?? 's/f'}</span>
                 <span><Clapperboard size={16} /> {item.quality}</span>
-                <span>{item.type === 'series' ? `${item.seasonCount ?? 0} temporadas` : 'película'}</span>
+                <span><Layers3 size={16} /> {item.type === 'series' ? `${item.seasonCount ?? 0} temporadas` : 'película'}</span>
               </div>
               <p className="detail-synopsis">{item.synopsis}</p>
               <div className="detail-chip-row">
-                {item.paths.slice(0, 3).map((path) => (
+                {item.paths.slice(0, 4).map((path) => (
                   <span key={path} className="path-chip">{path}</span>
                 ))}
               </div>
@@ -139,17 +155,20 @@ function DetailView({ item, onBack }: { item: MediaItem; onBack: () => void }) {
         </div>
       </section>
 
-      <section className="detail-content">
+      <section className="detail-content premium-detail-content">
         {item.seasons.length > 0 ? (
           <>
-            <h2>Temporadas</h2>
-            <div className="season-grid">
+            <div className="detail-section-header">
+              <h2>Temporadas</h2>
+              <p>{item.seasonCount} temporadas indexadas</p>
+            </div>
+            <div className="season-grid premium-season-grid">
               {item.seasons.map((season) => (
-                <article key={season.season} className="season-card">
+                <article key={season.season} className="season-card premium-season-card">
                   <h3>Temporada {season.season}</h3>
                   <p>{season.episodeCount} episodios</p>
                   <ul>
-                    {season.episodes.slice(0, 6).map((episode) => (
+                    {season.episodes.slice(0, 8).map((episode) => (
                       <li key={episode}>{episode}</li>
                     ))}
                   </ul>
@@ -159,9 +178,12 @@ function DetailView({ item, onBack }: { item: MediaItem; onBack: () => void }) {
           </>
         ) : (
           <>
-            <h2>Archivos</h2>
-            <div className="season-grid">
-              <article className="season-card">
+            <div className="detail-section-header">
+              <h2>Archivos</h2>
+              <p>Variantes detectadas</p>
+            </div>
+            <div className="season-grid premium-season-grid">
+              <article className="season-card premium-season-card">
                 <ul>
                   {item.variants.map((file) => (
                     <li key={file}>{file}</li>
@@ -172,7 +194,7 @@ function DetailView({ item, onBack }: { item: MediaItem; onBack: () => void }) {
           </>
         )}
       </section>
-    </div>
+    </motion.div>
   );
 }
 
