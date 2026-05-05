@@ -67,6 +67,17 @@ A non-technical user should not need to:
 - understand Plex internals
 - configure schedulers manually
 
+## First Telegram commands
+
+Once the bot starts successfully, the current minimal bridge should answer:
+
+- `/start`
+- `/libraries`
+- `/recipes`
+- `/collections`
+- `/collections Películas`
+- `/collections SERIESNZB`
+
 ## Future install goal
 
 Long-term ideal:

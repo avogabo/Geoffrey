@@ -43,7 +43,9 @@ A user should be able to deploy Geoffrey, talk to it on Telegram, and manage Ple
 
 ## Installable MVP scope
 
-The first installable MVP can ship before Telegram conversation is fully wired, as long as it already supports:
+The first installable MVP can ship with a minimal Telegram bridge, even if advanced conversation comes later.
+
+Current MVP target:
 
 - Docker deployment
 - env-based config
@@ -52,6 +54,7 @@ The first installable MVP can ship before Telegram conversation is fully wired, 
 - search
 - collection create/delete via CLI
 - structured local memory file
+- basic Telegram commands for visibility and smoke testing
 
 ## Non-goals for MVP
 
