@@ -53,6 +53,13 @@ Examples:
 
 Bootstrap plus first real code stage.
 
+The local MVP runtime has already been smoke-tested successfully against a real Plex server for:
+
+- startup
+- env loading
+- Plex library detection
+- recipe bootstrap
+
 Implemented so far:
 
 - env-based config loading

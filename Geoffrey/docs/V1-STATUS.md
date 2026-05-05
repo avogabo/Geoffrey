@@ -47,3 +47,16 @@ For the cleanest Geoffrey V1, the final delivery should converge toward:
 
 Geoffrey is not yet a polished end-user release, but it is already beyond idea stage.
 It now has a real install shape, real domain logic, and a clear product direction.
+
+## Current tested state
+
+A local end-to-end runtime smoke test already passes with:
+
+- image build
+- env loading
+- Plex connectivity
+- library detection
+- recipe bootstrap
+- collections listing path
+
+That means Geoffrey has reached a real, testable technical V1 baseline.
