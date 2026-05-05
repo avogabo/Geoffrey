@@ -1,0 +1,11 @@
+services:
+  geoffrey:
+    image: ghcr.io/avogabo/geoffrey:latest
+    container_name: geoffrey
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/data
+    environment:
+      - TZ=${TZ}
