@@ -58,6 +58,8 @@ Current MVP target:
 - first real Telegram actions for search/create/delete collection
 - simple delete confirmation flow
 - temporary collection creation path
+- basic natural-intent bridge for collection requests
+- automatic expiration cleanup loop for temporary collections
 
 ## Non-goals for MVP
 

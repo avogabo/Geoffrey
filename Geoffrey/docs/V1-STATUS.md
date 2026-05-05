@@ -59,4 +59,12 @@ A local end-to-end runtime smoke test already passes with:
 - recipe bootstrap
 - collections listing path
 
+And the current V1 scope now also includes:
+
+- first real Telegram collection actions
+- delete confirmation flow
+- temporary collection creation path
+- expiration cleanup loop
+- basic natural-intent bridge for collection-related prompts
+
 That means Geoffrey has reached a real, testable technical V1 baseline.

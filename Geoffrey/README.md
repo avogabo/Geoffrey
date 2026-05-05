@@ -74,4 +74,6 @@ Implemented so far:
 - minimal Telegram bridge with first real collection actions
 - simple delete confirmation flow
 - temporary collection creation path
+- basic natural-intent bridge
+- expiration cleanup loop for temporary collections
 - PicoClaw-oriented packaging strategy and prompt draft

@@ -42,6 +42,9 @@ func (a *App) handleTelegramText(text string) string {
 	if actionReply := a.handleTelegramAction(text); actionReply != "" {
 		return actionReply
 	}
+	if naturalReply := a.handleNaturalCollectionIntent(text); naturalReply != "" {
+		return naturalReply
+	}
 	low := strings.ToLower(strings.TrimSpace(text))
 	switch {
 	case low == "/start":
