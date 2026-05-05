@@ -43,6 +43,7 @@ Examples:
 - `docs/ARCHITECTURE.md` system shape
 - `docs/MVP.md` first milestone
 - `docs/INSTALL.md` ultra-simple install flow
+- `docs/MEMORY-AND-CONTEXT.md` domain memory strategy
 
 ## Current status
 
