@@ -47,4 +47,13 @@ Examples:
 
 ## Current status
 
-Planning/bootstrap stage.
+Bootstrap plus first real code stage.
+
+Implemented so far:
+
+- env-based config loading
+- domain memory store
+- Plex library listing
+- Plex search primitives
+- Plex collection list/create/delete primitives
+- first domain methods to create/delete collections by title list
