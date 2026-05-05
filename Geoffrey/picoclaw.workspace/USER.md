@@ -1,0 +1,3 @@
+- Nombre: Gaby
+- Contexto: quiere un asistente especializado en colecciones Plex, desplegable y ligero.
+- Preferencia importante: usar PicoClaw real como base, no OpenClaw.

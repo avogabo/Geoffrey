@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "agents": {
+    "defaults": {
+      "workspace": "/root/.picoclaw/workspace",
+      "model_name": "gpt-5.4",
+      "max_tokens": 8192,
+      "temperature": 0.3,
+      "max_tool_iterations": 20
+    }
+  },
+  "model_list": [
+    {
+      "model_name": "gpt-5.4",
+      "provider": "openai",
+      "model": "gpt-5.4",
+      "api_keys": ["YOUR_OPENAI_API_KEY"],
+      "request_timeout": 300
+    }
+  ],
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
+      "allow_from": ["15167988"]
+    }
+  },
+  "gateway": {
+    "host": "0.0.0.0",
+    "port": 18790
+  }
+}

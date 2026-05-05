@@ -1,18 +1,32 @@
-FROM node:24-bookworm
+# Geoffrey on real PicoClaw
+FROM golang:1.25-alpine AS builder
 
-RUN apt-get update && apt-get install -y git curl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache git make nodejs npm
+RUN npm install -g pnpm@10.33.0
 
-WORKDIR /opt
-RUN git clone https://github.com/openclaw/openclaw.git picoclaw
+WORKDIR /src
+COPY vendor/picoclaw/go.mod vendor/picoclaw/go.sum ./
+RUN go mod download
+COPY vendor/picoclaw ./
+RUN make build
 
-WORKDIR /opt/picoclaw
-RUN corepack enable && pnpm install --frozen-lockfile || pnpm install
-RUN pnpm build
+FROM alpine:3.23
+RUN apk add --no-cache ca-certificates tzdata curl
 
-WORKDIR /home/node/.openclaw/workspace
-COPY geoffrey.prompt.md /home/node/.openclaw/workspace/geoffrey.prompt.md
-COPY docs /home/node/.openclaw/workspace/Geoffrey/docs
-COPY picoclaw.geoffrey.json5.example /home/node/.openclaw/picoclaw.geoffrey.json5.example
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD wget -q --spider http://localhost:18790/health || exit 1
 
-WORKDIR /opt/picoclaw
-CMD ["node", "dist/index.js", "gateway"]
+COPY --from=builder /src/build/picoclaw /usr/local/bin/picoclaw
+COPY vendor/picoclaw/docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+RUN mkdir -p /root/.picoclaw/workspace /root/.picoclaw/workspace/memory /root/.picoclaw/docker
+COPY geoffrey.prompt.md /root/.picoclaw/workspace/geoffrey.prompt.md
+COPY docs /root/.picoclaw/workspace/Geoffrey/docs
+COPY picoclaw.config.json /root/.picoclaw/docker/config.json
+COPY picoclaw.workspace/AGENT.md /root/.picoclaw/workspace/AGENT.md
+COPY picoclaw.workspace/SOUL.md /root/.picoclaw/workspace/SOUL.md
+COPY picoclaw.workspace/USER.md /root/.picoclaw/workspace/USER.md
+COPY picoclaw.workspace/MEMORY.md /root/.picoclaw/workspace/memory/MEMORY.md
+
+ENTRYPOINT ["/entrypoint.sh"]
