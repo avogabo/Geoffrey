@@ -1,0 +1,18 @@
+FROM node:24-bookworm
+
+RUN apt-get update && apt-get install -y git curl ca-certificates && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt
+RUN git clone https://github.com/openclaw/openclaw.git picoclaw
+
+WORKDIR /opt/picoclaw
+RUN corepack enable && pnpm install --frozen-lockfile || pnpm install
+RUN pnpm build
+
+WORKDIR /home/node/.openclaw/workspace
+COPY geoffrey.prompt.md /home/node/.openclaw/workspace/geoffrey.prompt.md
+COPY docs /home/node/.openclaw/workspace/Geoffrey/docs
+COPY picoclaw.geoffrey.json5.example /home/node/.openclaw/picoclaw.geoffrey.json5.example
+
+WORKDIR /opt/picoclaw
+CMD ["node", "dist/index.js", "gateway"]

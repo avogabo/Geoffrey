@@ -1,0 +1,14 @@
+services:
+  geoffrey:
+    build:
+      context: .
+      dockerfile: Dockerfile.picoclaw
+    container_name: geoffrey-picoclaw
+    ports:
+      - "18789:18789"
+    volumes:
+      - ./runtime-config:/home/node/.openclaw
+      - ./workspace-data:/home/node/.openclaw/workspace
+    environment:
+      TZ: Europe/Madrid
+    restart: unless-stopped

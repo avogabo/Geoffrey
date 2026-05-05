@@ -42,6 +42,8 @@ Examples:
 - `.env.example` minimal configuration
 - `picoclaw.env.example` PicoClaw-oriented minimal env contract
 - `picoclaw.geoffrey.json5.example` PicoClaw runtime config example
+- `Dockerfile.picoclaw` first Geoffrey-on-PicoClaw container scaffold
+- `docker-compose.picoclaw.yml` first Geoffrey-on-PicoClaw compose scaffold
 - `geoffrey.prompt.md` Geoffrey system prompt draft
 - `docs/ARCHITECTURE.md` system shape
 - `docs/MVP.md` first milestone
@@ -49,6 +51,7 @@ Examples:
 - `docs/MEMORY-AND-CONTEXT.md` domain memory strategy
 - `docs/PICOCLAW-STRATEGY.md` packaging direction
 - `docs/INSTALL-PICOCLAW.md` correct install path on top of PicoClaw
+- `docs/PICOCLAW-CONTAINER.md` container packaging scaffold notes
 - `docs/V1-STATUS.md` current readiness summary
 
 ## Current status
@@ -80,3 +83,4 @@ Implemented so far:
 - expiration cleanup loop for temporary collections
 - PicoClaw-oriented packaging strategy and prompt draft
 - PicoClaw runtime config example and install path
+- first PicoClaw-container packaging scaffold
