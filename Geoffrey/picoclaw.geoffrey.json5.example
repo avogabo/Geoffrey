@@ -6,7 +6,7 @@
   },
 
   agent: {
-    workspace: "~/.openclaw/workspace/Geoffrey-workspace",
+    workspace: "~/picoclaw-geoffrey/workspace",
     model: { primary: "openai/gpt-5.4" },
   },
 

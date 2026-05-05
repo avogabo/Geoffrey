@@ -31,7 +31,7 @@ Geoffrey V1 is considered ready at the product-definition level when it has:
 The current codebase includes an exploratory standalone runtime path.
 For the cleanest Geoffrey V1, the final delivery should converge toward:
 
-- OpenClaw/PicoClaw as base runtime
+- PicoClaw as base runtime
 - Geoffrey prompt/persona and domain memory
 - Plex tools/actions
 - minimal install wrapper
@@ -71,4 +71,4 @@ That means Geoffrey has reached a real, testable technical V1 baseline.
 
 ## Important product correction
 
-The standalone Geoffrey runtime is useful as a domain prototype, but the intended installable product should carry OpenClaw/PicoClaw inside as the real runtime base.
+The standalone Geoffrey runtime is useful as a domain prototype, but the intended installable product should carry PicoClaw inside as the real runtime base.
