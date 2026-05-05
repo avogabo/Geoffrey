@@ -1,0 +1,33 @@
+{
+  identity: {
+    name: "Geoffrey",
+    theme: "Plex collections butler",
+    emoji: "🎬",
+  },
+
+  agent: {
+    workspace: "~/.openclaw/workspace/Geoffrey-workspace",
+    model: { primary: "openai/gpt-5.4" },
+  },
+
+  channels: {
+    telegram: {
+      enabled: true,
+      botToken: "YOUR_TELEGRAM_BOT_TOKEN",
+      dmPolicy: "allowlist",
+      allowFrom: ["15167988"],
+      groupPolicy: "allowlist",
+      groups: { "*": { requireMention: true } },
+    },
+  },
+
+  env: {
+    vars: {
+      PLEX_BASE_URL: "http://192.168.1.100:32400",
+      PLEX_TOKEN: "YOUR_PLEX_TOKEN",
+      PLEX_DEFAULT_LIBRARY: "Películas",
+      GEOFFREY_PROMPT_FILE: "/workspace/geoffrey.prompt.md",
+      GEOFFREY_DATA_DIR: "/workspace/data",
+    },
+  },
+}

@@ -1,6 +1,6 @@
 # Geoffrey
 
-Geoffrey is a Telegram-first AI butler focused on Plex collections, intended to ship as a specialized PicoClaw-based product.
+Geoffrey is a Telegram-first AI butler focused on Plex collections, intended to ship as a specialized OpenClaw/PicoClaw-based product.
 
 ## Goal
 
@@ -34,26 +34,28 @@ Examples:
 - Conversation-first, not YAML-first
 - Low-resource and easy to deploy
 - Telegram-first
-- Built on PicoClaw, trimmed to the Plex collections use case
+- Built on OpenClaw/PicoClaw, trimmed to the Plex collections use case
 
 ## Repo contents
 
 - `docker-compose.yml` example deployment
 - `.env.example` minimal configuration
 - `picoclaw.env.example` PicoClaw-oriented minimal env contract
+- `openclaw.geoffrey.json5.example` OpenClaw runtime config example
 - `geoffrey.prompt.md` Geoffrey system prompt draft
 - `docs/ARCHITECTURE.md` system shape
 - `docs/MVP.md` first milestone
 - `docs/INSTALL.md` ultra-simple install flow
 - `docs/MEMORY-AND-CONTEXT.md` domain memory strategy
 - `docs/PICOCLAW-STRATEGY.md` packaging direction
+- `docs/INSTALL-OPENCLAW.md` correct install path on top of OpenClaw
 - `docs/V1-STATUS.md` current readiness summary
 
 ## Current status
 
 Bootstrap plus first real code stage.
 
-The local MVP runtime has already been smoke-tested successfully against a real Plex server for:
+The exploratory local MVP runtime has already been smoke-tested successfully against a real Plex server for:
 
 - startup
 - env loading
@@ -77,3 +79,4 @@ Implemented so far:
 - basic natural-intent bridge
 - expiration cleanup loop for temporary collections
 - PicoClaw-oriented packaging strategy and prompt draft
+- OpenClaw runtime config example and install path
