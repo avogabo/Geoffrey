@@ -26,6 +26,30 @@ docker compose up -d
 - `PLEX_BASE_URL`
 - `PLEX_TOKEN`
 
+## First local validation
+
+Before Telegram is wired in fully, the first installable MVP can already be smoke-tested via CLI.
+
+Examples:
+
+```bash
+docker compose run --rm geoffrey /app/geoffrey -mode libraries
+
+docker compose run --rm geoffrey /app/geoffrey -mode search -section 1 -query "King Kong"
+
+docker compose run --rm geoffrey /app/geoffrey -mode collections -section 1
+```
+
+Create a collection manually from known titles:
+
+```bash
+docker compose run --rm geoffrey /app/geoffrey \
+  -mode create-collection \
+  -section 1 \
+  -name "Gorilas" \
+  -titles "King Kong, Gorilas en la niebla"
+```
+
 ## Nice-to-have defaults
 
 - prefilled `TZ`

@@ -57,3 +57,4 @@ Implemented so far:
 - Plex search primitives
 - Plex collection list/create/delete primitives
 - first domain methods to create/delete collections by title list
+- CLI modes for local smoke testing and first installable MVP

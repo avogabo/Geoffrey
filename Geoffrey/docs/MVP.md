@@ -41,6 +41,18 @@ A user should be able to deploy Geoffrey, talk to it on Telegram, and manage Ple
 - "Borra la colección Halloween de risa mañana"
 - "Crea una colección Marvel para ver en orden"
 
+## Installable MVP scope
+
+The first installable MVP can ship before Telegram conversation is fully wired, as long as it already supports:
+
+- Docker deployment
+- env-based config
+- Plex connectivity
+- library listing
+- search
+- collection create/delete via CLI
+- structured local memory file
+
 ## Non-goals for MVP
 
 - full Kometa parity
