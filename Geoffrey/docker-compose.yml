@@ -1,5 +1,6 @@
 services:
   geoffrey:
+    build: .
     image: ghcr.io/avogabo/geoffrey:latest
     container_name: geoffrey
     restart: unless-stopped
