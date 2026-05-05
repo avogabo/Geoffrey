@@ -1,6 +1,6 @@
 # Geoffrey
 
-Geoffrey is a PicoClaw-based Telegram-first AI butler focused on Plex collections.
+Geoffrey is a Telegram-first AI butler focused on Plex collections, intended to ship as a specialized PicoClaw-based product.
 
 ## Goal
 
@@ -40,10 +40,14 @@ Examples:
 
 - `docker-compose.yml` example deployment
 - `.env.example` minimal configuration
+- `picoclaw.env.example` PicoClaw-oriented minimal env contract
+- `geoffrey.prompt.md` Geoffrey system prompt draft
 - `docs/ARCHITECTURE.md` system shape
 - `docs/MVP.md` first milestone
 - `docs/INSTALL.md` ultra-simple install flow
 - `docs/MEMORY-AND-CONTEXT.md` domain memory strategy
+- `docs/PICOCLAW-STRATEGY.md` packaging direction
+- `docs/V1-STATUS.md` current readiness summary
 
 ## Current status
 
@@ -61,3 +65,4 @@ Implemented so far:
 - default recipe bootstrap for focused collection patterns
 - library resolution by key or title
 - minimal Telegram bridge with first real collection actions
+- PicoClaw-oriented packaging strategy and prompt draft
