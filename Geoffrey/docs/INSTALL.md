@@ -77,6 +77,9 @@ Once the bot starts successfully, the current minimal bridge should answer:
 - `/collections`
 - `/collections Películas`
 - `/collections SERIESNZB`
+- `/search Películas|King Kong`
+- `/create_collection Películas|Gorilas|King Kong, Gorilas en la niebla`
+- `/delete_collection Películas|Gorilas`
 
 ## Future install goal
 

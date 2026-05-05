@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/avogabo/geoffrey/internal/app"
 	"github.com/avogabo/geoffrey/internal/config"
@@ -54,7 +53,7 @@ func main() {
 		}
 	case "create-collection":
 		lib := resolveLibrary(application, *section)
-		titleList := splitCSV(*titles)
+		titleList := app.SplitCSV(*titles)
 		must(application.CreateCollectionFromTitles(lib.Key, *name, titleList, *prompt, false, ""))
 		fmt.Println("collection created")
 	case "delete-collection":
@@ -75,21 +74,6 @@ func must(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func splitCSV(in string) []string {
-	if strings.TrimSpace(in) == "" {
-		return nil
-	}
-	parts := strings.Split(in, ",")
-	out := make([]string, 0, len(parts))
-	for _, part := range parts {
-		part = strings.TrimSpace(part)
-		if part != "" {
-			out = append(out, part)
-		}
-	}
-	return out
 }
 
 func resolveLibrary(application *app.App, input string) plex.Library {

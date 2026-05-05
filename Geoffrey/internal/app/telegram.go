@@ -39,10 +39,13 @@ func (a *App) RunTelegram() error {
 }
 
 func (a *App) handleTelegramText(text string) string {
+	if actionReply := a.handleTelegramAction(text); actionReply != "" {
+		return actionReply
+	}
 	low := strings.ToLower(strings.TrimSpace(text))
 	switch {
 	case low == "/start":
-		return "Soy Geoffrey. Puedo ayudarte con colecciones de Plex. Prueba: /libraries, /recipes, /collections Películas"
+		return "Soy Geoffrey. Puedo ayudarte con colecciones de Plex. Prueba: /libraries, /recipes, /collections Películas, /search Películas|King Kong"
 	case low == "/libraries":
 		libs, err := a.Libraries()
 		if err != nil {
@@ -89,6 +92,6 @@ func (a *App) handleTelegramText(text string) string {
 		}
 		return strings.Join(lines, "\n")
 	default:
-		return "Aún estoy verde 😅\nUsa por ahora: /libraries, /recipes, /collections [biblioteca]"
+		return "Aún estoy verde 😅\nUsa por ahora: /libraries, /recipes, /collections [biblioteca], /search <biblioteca>|<texto>, /create_collection <biblioteca>|<nombre>|<titulo1, titulo2>"
 	}
 }
