@@ -56,6 +56,8 @@ Current MVP target:
 - structured local memory file
 - basic Telegram commands for visibility and smoke testing
 - first real Telegram actions for search/create/delete collection
+- simple delete confirmation flow
+- temporary collection creation path
 
 ## Non-goals for MVP
 

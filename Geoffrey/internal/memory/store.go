@@ -16,6 +16,7 @@ type Data struct {
 	Recipes         []Recipe           `json:"collection_recipes"`
 	History         []CollectionRecord `json:"collection_history"`
 	Clarifications  []Clarification    `json:"clarifications"`
+	PendingDeletes  []PendingDelete    `json:"pending_deletes"`
 }
 
 type Preferences struct {
@@ -49,6 +50,12 @@ type Clarification struct {
 	Topic          string `json:"topic"`
 	Interpretation string `json:"interpretation"`
 	UpdatedAt      string `json:"updated_at"`
+}
+
+type PendingDelete struct {
+	Library     string `json:"library"`
+	Name        string `json:"name"`
+	RequestedAt string `json:"requested_at"`
 }
 
 func Open(dataDir string) (*Store, error) {

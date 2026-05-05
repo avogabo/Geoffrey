@@ -54,6 +54,28 @@ func (a *App) handleTelegramAction(text string) string {
 		return fmt.Sprintf("Colección creada: %s", name)
 	}
 
+	if strings.HasPrefix(low, "/create_temporary_collection ") {
+		payload := strings.TrimSpace(trimmed[len("/create_temporary_collection "):])
+		parts := strings.SplitN(payload, "|", 4)
+		if len(parts) < 3 {
+			return "Uso: /create_temporary_collection <biblioteca>|<nombre>|<titulo1, titulo2>|[expiresAt RFC3339]"
+		}
+		lib, err := a.ResolveLibrarySection(strings.TrimSpace(parts[0]))
+		if err != nil {
+			return "No encuentro la biblioteca: " + err.Error()
+		}
+		name := strings.TrimSpace(parts[1])
+		titles := SplitCSV(parts[2])
+		expiresAt := ""
+		if len(parts) == 4 {
+			expiresAt = strings.TrimSpace(parts[3])
+		}
+		if err := a.CreateTemporaryCollectionFromTitles(lib.Key, name, titles, trimmed, expiresAt); err != nil {
+			return "No pude crear la colección temporal: " + err.Error()
+		}
+		return fmt.Sprintf("Colección temporal creada: %s", name)
+	}
+
 	if strings.HasPrefix(low, "/delete_collection ") {
 		payload := strings.TrimSpace(trimmed[len("/delete_collection "):])
 		parts := strings.SplitN(payload, "|", 2)
@@ -65,7 +87,24 @@ func (a *App) handleTelegramAction(text string) string {
 			return "No encuentro la biblioteca: " + err.Error()
 		}
 		name := strings.TrimSpace(parts[1])
-		if err := a.DeleteCollectionByName(lib.Key, name); err != nil {
+		if err := a.RequestDelete(lib.Key, name); err != nil {
+			return "No pude preparar el borrado: " + err.Error()
+		}
+		return fmt.Sprintf("Confirma con /confirm_delete %s|%s", strings.TrimSpace(parts[0]), name)
+	}
+
+	if strings.HasPrefix(low, "/confirm_delete ") {
+		payload := strings.TrimSpace(trimmed[len("/confirm_delete "):])
+		parts := strings.SplitN(payload, "|", 2)
+		if len(parts) != 2 {
+			return "Uso: /confirm_delete <biblioteca>|<nombre>"
+		}
+		lib, err := a.ResolveLibrarySection(strings.TrimSpace(parts[0]))
+		if err != nil {
+			return "No encuentro la biblioteca: " + err.Error()
+		}
+		name := strings.TrimSpace(parts[1])
+		if err := a.ConfirmDelete(lib.Key, name); err != nil {
 			return "No pude borrar la colección: " + err.Error()
 		}
 		return fmt.Sprintf("Colección borrada: %s", name)

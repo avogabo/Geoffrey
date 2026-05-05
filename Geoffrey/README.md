@@ -72,4 +72,6 @@ Implemented so far:
 - default recipe bootstrap for focused collection patterns
 - library resolution by key or title
 - minimal Telegram bridge with first real collection actions
+- simple delete confirmation flow
+- temporary collection creation path
 - PicoClaw-oriented packaging strategy and prompt draft
