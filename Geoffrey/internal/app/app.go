@@ -35,9 +35,12 @@ func (a *App) Run() error {
 	}
 	if a.memory.Data.UserPreferences.DefaultMovieLibrary == "" {
 		a.memory.Data.UserPreferences.DefaultMovieLibrary = a.cfg.PlexDefaultLibrary
-		if err := a.memory.Save(); err != nil {
-			return fmt.Errorf("save memory: %w", err)
-		}
+	}
+	if len(a.memory.Data.Recipes) == 0 {
+		a.memory.Data.Recipes = memory.DefaultRecipes()
+	}
+	if err := a.memory.Save(); err != nil {
+		return fmt.Errorf("save memory: %w", err)
 	}
 	return nil
 }

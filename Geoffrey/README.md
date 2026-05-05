@@ -58,3 +58,5 @@ Implemented so far:
 - Plex collection list/create/delete primitives
 - first domain methods to create/delete collections by title list
 - CLI modes for local smoke testing and first installable MVP
+- default recipe bootstrap for focused collection patterns
+- library resolution by key or title

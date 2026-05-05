@@ -9,11 +9,12 @@ import (
 
 	"github.com/avogabo/geoffrey/internal/app"
 	"github.com/avogabo/geoffrey/internal/config"
+	"github.com/avogabo/geoffrey/internal/plex"
 )
 
 func main() {
-	mode := flag.String("mode", "serve", "serve|libraries|search|collections|create-collection|delete-collection")
-	section := flag.String("section", "", "Plex library section key")
+	mode := flag.String("mode", "serve", "serve|libraries|search|collections|create-collection|delete-collection|recipes")
+	section := flag.String("section", "", "Plex library section key or library title")
 	query := flag.String("query", "", "Search query")
 	name := flag.String("name", "", "Collection name")
 	titles := flag.String("titles", "", "Comma-separated titles")
@@ -38,24 +39,32 @@ func main() {
 			fmt.Printf("%s\t%s\t%s\n", lib.Key, lib.Type, lib.Title)
 		}
 	case "search":
-		items, err := application.Search(*section, *query)
+		lib := resolveLibrary(application, *section)
+		items, err := application.Search(lib.Key, *query)
 		must(err)
 		for _, item := range items {
 			fmt.Printf("%s\t%s\t%s\t%d\n", item.RatingKey, item.Type, item.Title, item.Year)
 		}
 	case "collections":
-		items, err := application.Collections(*section)
+		lib := resolveLibrary(application, *section)
+		items, err := application.Collections(lib.Key)
 		must(err)
 		for _, item := range items {
 			fmt.Printf("%s\t%s\t%s\t%d\n", item.RatingKey, item.Type, item.Title, item.ChildCount)
 		}
 	case "create-collection":
+		lib := resolveLibrary(application, *section)
 		titleList := splitCSV(*titles)
-		must(application.CreateCollectionFromTitles(*section, *name, titleList, *prompt, false, ""))
+		must(application.CreateCollectionFromTitles(lib.Key, *name, titleList, *prompt, false, ""))
 		fmt.Println("collection created")
 	case "delete-collection":
-		must(application.DeleteCollectionByName(*section, *name))
+		lib := resolveLibrary(application, *section)
+		must(application.DeleteCollectionByName(lib.Key, *name))
 		fmt.Println("collection deleted")
+	case "recipes":
+		for _, recipe := range application.Recipes() {
+			fmt.Printf("%s\t%s\t%v\n", recipe.ID, recipe.Name, recipe.PromptAliases)
+		}
 	default:
 		fmt.Fprintf(os.Stderr, "unknown mode: %s\n", *mode)
 		os.Exit(2)
@@ -81,4 +90,12 @@ func splitCSV(in string) []string {
 		}
 	}
 	return out
+}
+
+func resolveLibrary(application *app.App, input string) plex.Library {
+	lib, err := application.ResolveLibrarySection(input)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return lib
 }

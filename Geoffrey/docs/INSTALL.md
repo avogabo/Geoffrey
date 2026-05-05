@@ -35,9 +35,11 @@ Examples:
 ```bash
 docker compose run --rm geoffrey /app/geoffrey -mode libraries
 
-docker compose run --rm geoffrey /app/geoffrey -mode search -section 1 -query "King Kong"
+docker compose run --rm geoffrey /app/geoffrey -mode search -section "Películas" -query "King Kong"
 
-docker compose run --rm geoffrey /app/geoffrey -mode collections -section 1
+docker compose run --rm geoffrey /app/geoffrey -mode collections -section "Películas"
+
+docker compose run --rm geoffrey /app/geoffrey -mode recipes
 ```
 
 Create a collection manually from known titles:
@@ -45,7 +47,7 @@ Create a collection manually from known titles:
 ```bash
 docker compose run --rm geoffrey /app/geoffrey \
   -mode create-collection \
-  -section 1 \
+  -section "Películas" \
   -name "Gorilas" \
   -titles "King Kong, Gorilas en la niebla"
 ```
