@@ -2,91 +2,56 @@
 
 ## Goal
 
-Installation should feel extremely simple.
+Levantar Geoffrey como app visual de colecciones Plex en un solo `docker compose up`.
 
 ## User flow
 
-1. Create a folder named `geoffrey`
-2. Copy `.env.example` to `.env`
-3. Fill in:
-   - Telegram bot token
-   - LLM API key
-   - Plex base URL
-   - Plex token
-4. Run:
+1. Copia `.env.example` a `.env`
+2. Rellena:
+   - `PLEX_BASE_URL`
+   - `PLEX_TOKEN`
+   - opcionalmente `PLEX_DEFAULT_LIBRARY`
+3. Arranca:
 
 ```bash
-docker compose up -d
+docker compose up -d --build
+```
+
+4. Abre Geoffrey en:
+
+```text
+http://localhost:18080
 ```
 
 ## Minimal config fields
 
-- `TELEGRAM_BOT_TOKEN`
-- `LLM_API_KEY`
 - `PLEX_BASE_URL`
 - `PLEX_TOKEN`
 
-## First local validation
+## What you get
 
-Before Telegram is wired in fully, the first installable MVP can already be smoke-tested via CLI.
+- selector de bibliotecas Plex
+- búsqueda de títulos
+- creación de colecciones
+- colecciones temporales con fecha
+- póster por URL o subida
+- borrado con confirmación
+- previews visuales con imágenes reales de Plex
 
-Examples:
+## Smoke test
 
-```bash
-docker compose run --rm geoffrey /app/geoffrey -mode libraries
-
-docker compose run --rm geoffrey /app/geoffrey -mode search -section "Películas" -query "King Kong"
-
-docker compose run --rm geoffrey /app/geoffrey -mode collections -section "Películas"
-
-docker compose run --rm geoffrey /app/geoffrey -mode recipes
-```
-
-Create a collection manually from known titles:
+Comprueba primero que la API responde:
 
 ```bash
-docker compose run --rm geoffrey /app/geoffrey \
-  -mode create-collection \
-  -section "Películas" \
-  -name "Gorilas" \
-  -titles "King Kong, Gorilas en la niebla"
+curl http://localhost:18080/api/health
+curl http://localhost:18080/api/libraries
 ```
-
-## Nice-to-have defaults
-
-- prefilled `TZ`
-- sensible default model
-- sensible log level
 
 ## Product expectation
 
-A non-technical user should not need to:
+Un usuario no técnico no debería necesitar:
 
-- write YAML automations
-- edit multiple files
-- understand Plex internals
-- configure schedulers manually
-
-## First Telegram commands
-
-Once the bot starts successfully, the current minimal bridge should answer:
-
-- `/start`
-- `/libraries`
-- `/recipes`
-- `/collections`
-- `/collections Películas`
-- `/collections SERIESNZB`
-- `/search Películas|King Kong`
-- `/create_collection Películas|Gorilas|King Kong, Gorilas en la niebla`
-- `/create_temporary_collection Películas|Halloween de risa|Scary Movie, Gremlins`
-- `/delete_collection Películas|Gorilas`
-- `/confirm_delete Películas|Gorilas`
-
-## Future install goal
-
-Long-term ideal:
-
-- one Docker image
-- one setup wizard or one env file
-- one Telegram bot conversation to finish onboarding
+- Telegram
+- claves de LLM
+- YAMLs de automatización
+- entender internals de Plex
