@@ -1,6 +1,6 @@
 # Geoffrey
 
-Geoffrey is a Telegram-first AI butler focused on Plex collections, intended to ship as a specialized PicoClaw-based product.
+Geoffrey is pivoting into a lightweight visual Plex collections app, with Telegram reduced to an optional side channel instead of the core product.
 
 ## Goal
 
@@ -8,37 +8,36 @@ Ultra-simple install:
 
 1. Deploy one Docker container
 2. Set a few env vars
-3. Start chatting on Telegram
+3. Open Geoffrey in the browser
 
 User-facing setup should require only:
 
-- Telegram bot token
-- LLM API key
 - Plex base URL
 - Plex token
+- optional default library
 
 ## Intended UX
 
-Examples:
+First UI flow:
 
-- "Créame una colección Marvel por orden de visionado"
-- "Hazme una colección de películas de gorilas"
-- "Crea una colección temporal Halloween de risa"
-- "Hazme una colección Navidad TV"
-- "Añade Gremlins a Navidad TV"
-- "Borra la colección Halloween de risa el 2 de noviembre"
+- choose a Plex library
+- search titles and pick exact matches
+- create a collection, optionally temporary
+- attach a poster by URL or upload
+- review existing collections and delete with confirmation
 
 ## Product stance
 
 - Specialized, not general-purpose
-- Conversation-first, not YAML-first
+- UI-first, not chat-first
 - Low-resource and easy to deploy
-- Telegram-first
-- Built on PicoClaw, trimmed to the Plex collections use case
+- Focused on Plex curation workflows
+- Poster-aware and recipe-aware
 
 ## Repo contents
 
 - `docker-compose.yml` example deployment
+- `web/` React UI for Geoffrey
 - `.env.example` minimal configuration
 - `picoclaw.env.example` PicoClaw-oriented minimal env contract
 - `picoclaw.geoffrey.json5.example` PicoClaw runtime config example
@@ -56,7 +55,7 @@ Examples:
 
 ## Current status
 
-Bootstrap plus first real code stage.
+Pivot in progress from chat-first prototype to browser UI.
 
 The exploratory local MVP runtime has already been smoke-tested successfully against a real Plex server for:
 

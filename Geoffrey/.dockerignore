@@ -1,0 +1,8 @@
+picoclaw-data
+vendor/picoclaw
+vendor/openclaw
+node_modules
+web/node_modules
+web/dist
+web/*.tsbuildinfo
+.git

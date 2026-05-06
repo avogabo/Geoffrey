@@ -43,8 +43,5 @@ func (a *App) Run() error {
 		return fmt.Errorf("save memory: %w", err)
 	}
 	a.StartSchedulers()
-	if a.cfg.TelegramBotToken != "" {
-		return a.RunTelegram()
-	}
-	return nil
+	return a.RunHTTP()
 }
