@@ -30,6 +30,8 @@ type collectionDTO struct {
 	ChildCount int    `json:"childCount"`
 	Temporary  bool   `json:"temporary"`
 	ExpiresAt  string `json:"expiresAt,omitempty"`
+	ThumbURL   string `json:"thumbUrl,omitempty"`
+	ArtURL     string `json:"artUrl,omitempty"`
 }
 
 type recipeDTO struct {
@@ -71,6 +73,7 @@ func (a *App) RunHTTP() error {
 	mux.HandleFunc("/api/recipes", api.handleRecipes)
 	mux.HandleFunc("/api/settings", api.handleSettings)
 	mux.HandleFunc("/api/poster/upload", api.handlePosterUpload)
+	mux.HandleFunc("/api/plex/image", api.handlePlexImage)
 	mux.HandleFunc("/api/collections/", api.handleCollectionDelete)
 	mux.Handle("/", http.FileServer(http.Dir("/app/web")))
 	addr := ":8080"
@@ -134,7 +137,7 @@ func (s *server) handleCollections(w http.ResponseWriter, r *http.Request) {
 		items := make([]collectionDTO, 0, len(collections))
 		for _, item := range collections {
 			meta := metaByName[strings.ToLower(libraryKey+"::"+item.Title)]
-			items = append(items, collectionDTO{RatingKey: item.RatingKey, Title: item.Title, Type: item.Type, ChildCount: item.ChildCount, Temporary: meta.temp, ExpiresAt: meta.expires})
+			items = append(items, collectionDTO{RatingKey: item.RatingKey, Title: item.Title, Type: item.Type, ChildCount: item.ChildCount, Temporary: meta.temp, ExpiresAt: meta.expires, ThumbURL: proxyImageURL(item.Thumb), ArtURL: proxyImageURL(item.Art)})
 		}
 		sort.Slice(items, func(i, j int) bool { return strings.ToLower(items[i].Title) < strings.ToLower(items[j].Title) })
 		writeJSON(w, http.StatusOK, map[string]any{"items": items})
@@ -229,6 +232,30 @@ func (s *server) handleSettings(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, settingsDTO{PlexBaseURL: s.app.cfg.PlexBaseURL, PlexDefaultLibrary: s.app.cfg.PlexDefaultLibrary, DataDir: s.app.cfg.DataDir, TelegramEnabled: s.app.cfg.TelegramBotToken != "", TimeZone: s.app.cfg.TimeZone})
 }
 
+func (s *server) handlePlexImage(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+	path := strings.TrimSpace(r.URL.Query().Get("path"))
+	if path == "" {
+		writeError(w, http.StatusBadRequest, "path is required")
+		return
+	}
+	resp, err := s.app.plex.FetchImage(path)
+	if err != nil {
+		writeError(w, http.StatusBadGateway, err.Error())
+		return
+	}
+	defer resp.Body.Close()
+	if ct := resp.Header.Get("Content-Type"); ct != "" {
+		w.Header().Set("Content-Type", ct)
+	}
+	w.Header().Set("Cache-Control", "public, max-age=3600")
+	w.WriteHeader(http.StatusOK)
+	_, _ = io.Copy(w, resp.Body)
+}
+
 func (s *server) handlePosterUpload(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
@@ -260,6 +287,13 @@ func writeJSON(w http.ResponseWriter, status int, payload any) {
 
 func writeError(w http.ResponseWriter, status int, msg string) {
 	writeJSON(w, status, map[string]any{"error": msg})
+}
+
+func proxyImageURL(path string) string {
+	if strings.TrimSpace(path) == "" {
+		return ""
+	}
+	return "/api/plex/image?path=" + url.QueryEscape(path)
 }
 
 func fileToDataURL(file multipart.File, header *multipart.FileHeader) (string, error) {

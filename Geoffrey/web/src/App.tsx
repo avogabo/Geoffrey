@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Clapperboard, Clock3, ImagePlus, Library, LoaderCircle, Plus, Search, Sparkles, Trash2 } from 'lucide-react'
 
 type LibraryItem = { key: string; title: string; type: string }
-type CollectionItem = { ratingKey: string; title: string; type: string; childCount: number; temporary: boolean; expiresAt?: string }
-type SearchItem = { ratingKey: string; title: string; type: string; year: number }
+type CollectionItem = { ratingKey: string; title: string; type: string; childCount: number; temporary: boolean; expiresAt?: string; thumbUrl?: string; artUrl?: string }
+type SearchItem = { ratingKey: string; title: string; type: string; year: number; thumb?: string; art?: string }
 type RecipeItem = { id: string; name: string; promptAliases: string[]; inclusionRules: string[]; exclusionRules: string[]; orderingRules: string[]; temporaryByDefault: boolean }
 type Settings = { plexBaseUrl: string; plexDefaultLibrary: string; dataDir: string; telegramEnabled: boolean; timeZone: string }
 
@@ -263,6 +263,7 @@ export default function App() {
             <div className="results-grid">
               {loading ? <Loader /> : searchResults.map((item) => (
                 <button key={item.ratingKey} className={`result-card ${selectedTitles.some((entry) => entry.ratingKey === item.ratingKey) ? 'selected' : ''}`} onClick={() => toggleTitle(item)}>
+                  <Poster src={item.thumb ? `/api/plex/image?path=${encodeURIComponent(item.thumb)}` : ''} alt={item.title} compact />
                   <strong>{item.title}</strong>
                   <span>{item.type} · {item.year || 's/f'}</span>
                 </button>
@@ -279,8 +280,9 @@ export default function App() {
             <div className="section-head"><h2>Colecciones existentes</h2><span>{libraries.find((item) => item.key === selectedLibrary)?.title ?? 'Sin biblioteca'}</span></div>
             <div className="collection-list">
               {collections.map((item) => (
-                <div key={item.ratingKey} className="collection-row">
-                  <div>
+                <div key={item.ratingKey} className="collection-row visual">
+                  <Poster src={item.thumbUrl || item.artUrl || ''} alt={item.title} />
+                  <div className="collection-copy">
                     <strong>{item.title}</strong>
                     <span>{item.childCount} elementos {item.temporary ? `· temporal ${item.expiresAt || ''}` : ''}</span>
                   </div>
@@ -302,6 +304,11 @@ function Stat({ label, value, icon }: { label: string; value: number; icon: Reac
 
 function Loader() {
   return <div className="empty"><LoaderCircle className="spin" size={18} /> Cargando…</div>
+}
+
+function Poster({ src, alt, compact = false }: { src: string; alt: string; compact?: boolean }) {
+  if (!src) return <div className={`poster ${compact ? 'compact' : ''} placeholder`}><Clapperboard size={compact ? 18 : 24} /></div>
+  return <img className={`poster ${compact ? 'compact' : ''}`} src={src} alt={alt} loading="lazy" />
 }
 
 async function fetchJSON<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {

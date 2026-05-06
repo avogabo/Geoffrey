@@ -18,6 +18,8 @@ type Video struct {
 	Title     string `xml:"title,attr"`
 	Type      string `xml:"type,attr"`
 	Year      int    `xml:"year,attr"`
+	Thumb     string `xml:"thumb,attr"`
+	Art       string `xml:"art,attr"`
 }
 
 type MetadataResponse struct {
@@ -25,11 +27,13 @@ type MetadataResponse struct {
 }
 
 type Collection struct {
-	RatingKey string `xml:"ratingKey,attr"`
-	Title     string `xml:"title,attr"`
-	Type      string `xml:"type,attr"`
-	Subtype   string `xml:"subtype,attr"`
-	ChildCount int   `xml:"childCount,attr"`
+	RatingKey  string `xml:"ratingKey,attr"`
+	Title      string `xml:"title,attr"`
+	Type       string `xml:"type,attr"`
+	Subtype    string `xml:"subtype,attr"`
+	ChildCount int    `xml:"childCount,attr"`
+	Thumb      string `xml:"thumb,attr"`
+	Art        string `xml:"art,attr"`
 }
 
 func (c *Client) Search(sectionKey, query string) ([]Video, error) {
