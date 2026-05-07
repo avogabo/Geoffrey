@@ -70,6 +70,7 @@ func (a *App) RunHTTP() error {
 	mux.HandleFunc("/api/libraries", api.handleLibraries)
 	mux.HandleFunc("/api/collections", api.handleCollections)
 	mux.HandleFunc("/api/search", api.handleSearch)
+	mux.HandleFunc("/api/ideas", api.handleIdeas)
 	mux.HandleFunc("/api/recipes", api.handleRecipes)
 	mux.HandleFunc("/api/settings", api.handleSettings)
 	mux.HandleFunc("/api/poster/upload", api.handlePosterUpload)
@@ -209,6 +210,25 @@ func (s *server) handleSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, map[string]any{"items": items})
+}
+
+func (s *server) handleIdeas(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
+	libraryKey := strings.TrimSpace(r.URL.Query().Get("library"))
+	idea := strings.TrimSpace(r.URL.Query().Get("idea"))
+	if libraryKey == "" || idea == "" {
+		writeError(w, http.StatusBadRequest, "library and idea are required")
+		return
+	}
+	suggestion, err := s.app.SuggestFromIdea(libraryKey, idea)
+	if err != nil {
+		writeError(w, http.StatusBadGateway, err.Error())
+		return
+	}
+	writeJSON(w, http.StatusOK, suggestion)
 }
 
 func (s *server) handleRecipes(w http.ResponseWriter, r *http.Request) {

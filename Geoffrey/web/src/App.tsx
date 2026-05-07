@@ -7,6 +7,7 @@ type CollectionItem = { ratingKey: string; title: string; type: string; childCou
 type SearchItem = { ratingKey: string; title: string; type: string; year: number; thumb?: string; art?: string }
 type RecipeItem = { id: string; name: string; promptAliases: string[]; inclusionRules: string[]; exclusionRules: string[]; orderingRules: string[]; temporaryByDefault: boolean }
 type Settings = { plexBaseUrl: string; plexDefaultLibrary: string; dataDir: string; telegramEnabled: boolean; timeZone: string }
+type IdeaSuggestion = { recipeId?: string; recipeName?: string; matchedAliases?: string[]; searchTerms: string[]; suggestedTitles: SearchItem[] }
 
 type FormState = {
   name: string
@@ -41,6 +42,7 @@ export default function App() {
   const [working, setWorking] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [ideaSuggestion, setIdeaSuggestion] = useState<IdeaSuggestion | null>(null)
 
   useEffect(() => {
     void bootstrap()
@@ -103,6 +105,27 @@ export default function App() {
       const res = await fetchJSON<{ items: SearchItem[] }>(`/api/search?library=${encodeURIComponent(selectedLibrary)}&q=${encodeURIComponent(form.query)}`)
       setSearchResults(res.items)
       if (!res.items.length) setSuccess('No he encontrado resultados con esa búsqueda.')
+    } catch (err) {
+      setError(readError(err))
+    } finally {
+      setWorking(false)
+    }
+  }
+
+  async function runIdeaSearch() {
+    if (!form.sourcePrompt.trim() || !selectedLibrary) return
+    try {
+      setWorking(true)
+      setError('')
+      setSuccess('')
+      const suggestion = await fetchJSON<IdeaSuggestion>(`/api/ideas?library=${encodeURIComponent(selectedLibrary)}&idea=${encodeURIComponent(form.sourcePrompt)}`)
+      setIdeaSuggestion(suggestion)
+      setSearchResults(suggestion.suggestedTitles)
+      setSelectedTitles(suggestion.suggestedTitles)
+      if (!form.name.trim()) {
+        setForm((current) => ({ ...current, name: suggestion.recipeName || current.sourcePrompt }))
+      }
+      setSuccess(`Te propongo ${suggestion.suggestedTitles.length} candidatos para “${form.sourcePrompt}”.`)
     } catch (err) {
       setError(readError(err))
     } finally {
@@ -255,7 +278,10 @@ export default function App() {
                   </label>
                   <label>
                     <span>Idea / receta</span>
-                    <input value={form.sourcePrompt} onChange={(e) => setForm({ ...form, sourcePrompt: e.target.value })} placeholder="Navidad TV acogedora" />
+                    <div className="search-row">
+                      <input value={form.sourcePrompt} onChange={(e) => setForm({ ...form, sourcePrompt: e.target.value })} placeholder="Películas de nieve como Frozen" />
+                      <button className="ghost" onClick={runIdeaSearch} disabled={working}><Wand2 size={16} /> Proponer</button>
+                    </div>
                   </label>
                   <label className="wide-field">
                     <span>Búsqueda Plex</span>
@@ -290,6 +316,8 @@ export default function App() {
                 <button className="primary wide" onClick={createCollection} disabled={working || !canCreate}><Plus size={16} /> Crear colección</button>
               </aside>
             </div>
+
+            {ideaSuggestion ? <div className="idea-banner"><strong>{ideaSuggestion.recipeName || 'Idea libre'}</strong><span>Búsquedas sugeridas: {ideaSuggestion.searchTerms.join(' · ')}</span></div> : null}
 
             <div className="poster-box">
               <div>

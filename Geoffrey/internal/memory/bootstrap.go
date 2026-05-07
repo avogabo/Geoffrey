@@ -29,5 +29,14 @@ func DefaultRecipes() []Recipe {
 			OrderingRules:     []string{"año"},
 			TemporaryByDefault: false,
 		},
+		{
+			ID:                "nieve",
+			Name:              "Películas de nieve",
+			PromptAliases:     []string{"nieve", "películas de nieve", "como frozen", "invierno", "winter"},
+			InclusionRules:    []string{"frozen", "snow", "winter", "ice", "navidad"},
+			ExclusionRules:    []string{},
+			OrderingRules:     []string{"mezcla"},
+			TemporaryByDefault: false,
+		},
 	}
 }
