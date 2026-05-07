@@ -71,6 +71,20 @@ func (a *App) SuggestFromIdea(sectionKey, idea string) (IdeaSuggestion, error) {
 	if len(suggestion.SearchTerms) == 0 {
 		suggestion.SearchTerms = []string{idea}
 	}
+	if a.tmdb != nil && a.tmdb.Enabled() {
+		for _, seed := range append([]string{idea}, suggestion.SearchTerms...) {
+			movies, err := a.tmdb.SearchMovie(seed)
+			if err != nil {
+				continue
+			}
+			for _, movie := range movies {
+				appendIdeaTerm(cleanIdeaTerm(movie.Title), seenTerms, &suggestion.SearchTerms)
+			}
+			if len(movies) > 0 {
+				break
+			}
+		}
+	}
 
 	scored := map[string]*scoredVideo{}
 	for idx, term := range suggestion.SearchTerms {

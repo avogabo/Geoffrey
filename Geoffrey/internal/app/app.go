@@ -7,12 +7,14 @@ import (
 	"github.com/avogabo/geoffrey/internal/config"
 	"github.com/avogabo/geoffrey/internal/memory"
 	"github.com/avogabo/geoffrey/internal/plex"
+	"github.com/avogabo/geoffrey/internal/tmdb"
 )
 
 type App struct {
 	cfg    config.Config
 	memory *memory.Store
 	plex   *plex.Client
+	tmdb   *tmdb.Client
 }
 
 func New(cfg config.Config) (*App, error) {
@@ -21,7 +23,8 @@ func New(cfg config.Config) (*App, error) {
 		return nil, err
 	}
 	client := plex.New(cfg.PlexBaseURL, cfg.PlexToken)
-	return &App{cfg: cfg, memory: store, plex: client}, nil
+	tmdbClient := tmdb.New(cfg.TMDBAPIKey)
+	return &App{cfg: cfg, memory: store, plex: client, tmdb: tmdbClient}, nil
 }
 
 func (a *App) Run() error {

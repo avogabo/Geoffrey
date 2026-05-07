@@ -12,6 +12,7 @@ type Config struct {
 	PlexBaseURL        string
 	PlexToken          string
 	PlexDefaultLibrary string
+	TMDBAPIKey         string
 	TimeZone           string
 	DataDir            string
 	LogLevel           string
@@ -26,6 +27,7 @@ func Load() Config {
 		PlexBaseURL:        os.Getenv("PLEX_BASE_URL"),
 		PlexToken:          os.Getenv("PLEX_TOKEN"),
 		PlexDefaultLibrary: getenv("PLEX_DEFAULT_LIBRARY", "Películas"),
+		TMDBAPIKey:         os.Getenv("TMDB_API_KEY"),
 		TimeZone:           getenv("TZ", "UTC"),
 		DataDir:            getenv("GEOFFREY_DATA_DIR", "/data"),
 		LogLevel:           getenv("GEOFFREY_LOG_LEVEL", "info"),
